@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-xl font-bold text-center my-6">Manage Inventory</h1>
+        <div class="mb-6">
+            <h2 class="text-lg font-bold mb-4">Add New Product</h2>
+            <form id="addProductForm">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <input type="text" name="barcode" placeholder="Barcode" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                    <input type="text" name="productName" placeholder="Product Name" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                    <input type="text" name="category" placeholder="Category" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                    <select name="suppliedFrom" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                        <option value="">Supplied From</option>
+                        <option value="supplier">Supplier</option>
+                        <option value="company">Bought by Company</option>
+                    </select>
+                    <input type="text" name="fitsCars" placeholder="Fits These Cars" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                    <input type="number" name="unitPrice" placeholder="Unit Price" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                    <input type="text" name="supplierName" placeholder="Supplier Name" class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                </div>
+                <button type="submit" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full">Add Product</button>
+            </form>
+        </div>
+        <div id="inventoryList" class="mt-6">
+            <h2 class="text-lg font-bold mb-4">Inventory List</h2>
+            <!-- Inventory items will be listed here -->
+        </div>
+    </div>
+
+    <script>
+        function addProductToInventory(data) {
+    return fetch('http://127.0.0.1:5000/add_product_to_inventory', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json());
+}
+
+        document.getElementById('addProductForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            // Assume addProductToInventory is a function provided by backend
+            addProductToInventory(data).then(() => {
+                alert('Product added successfully!');
+                event.target.reset();
+                updateInventoryList(); // Refresh the inventory list
+            });
+        };
+
+        function updateInventoryList() {
+            // Assume getInventoryList is a function provided by backend
+            getInventoryList().then(products => {
+                const listElement = document.getElementById('inventoryList');
+                listElement.innerHTML = '<h2 class="text-lg font-bold mb-4">Inventory List</h2>';
+                products.forEach(product => {
+                    listElement.innerHTML += `<div class="p-4 mb-2 bg-white rounded shadow">
+                        <p><strong>${product.productName}</strong> (${product.barcode}) - ${product.category}</p>
+                        <p>Price: $${product.unitPrice.toFixed(2)} - Fits: ${product.fitsCars}</p>
+                        <p>Supplied by: ${product.suppliedFrom} ${product.supplierName ? '- ' + product.supplierName : ''}</p>
+                    </div>`;
+                });
+            });
+        }
+
+        updateInventoryList(); // Initial inventory list update
+    </script>
+</body>
+</html>

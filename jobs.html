@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Job</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-xl font-bold text-center my-6">Register Job</h1>
+        <form id="jobForm">
+            <input type="text" name="licensePlate" placeholder="License Plate" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="number" name="mileage" placeholder="Mileage" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <select name="actionCategory" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+                <option value="">Select Action Category</option>
+                <option value="smallJob">Small Job</option>
+                <option value="brakes">Brakes</option>
+                <option value="oilChange">Oil Change</option>
+                <option value="engineBay">Engine Bay</option>
+            </select>
+            <input type="text" name="action" placeholder="Specific Action" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="text" name="comment" placeholder="Comment" class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <div id="productsContainer">
+                <h2 class="text-lg font-bold mb-2">Products Used:</h2>
+                <button type="button" onclick="addProductInput()" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                    Add Product
+                </button>
+            </div>
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Register Job</button>
+        </form>
+    </div>
+
+    <script>
+        let productCount = 0;
+
+        function addProductInput() {
+            if (productCount >= 6) {
+                alert('Cannot add more than 6 products.');
+                return;
+            }
+            const container = document.getElementById('productsContainer');
+            const inputHtml = `<div class="flex items-center mb-2">
+                <input type="number" name="product${productCount}Id" placeholder="Product ID" required class="border-2 border-gray-300 rounded py-2 px-4 flex-grow">
+                <button type="button" onclick="this.parentElement.remove();" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                    Remove
+                </button>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', inputHtml);
+            productCount++;
+        }
+
+        document.getElementById('jobForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            // Assume registerJob is a function provided by backend
+            registerJob(data).then(() => {
+                alert('Job registered successfully!');
+                event.target.reset();
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Tire Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-xl font-bold text-center my-6">Register Tire Service</h1>
+        <form id="tireServiceForm">
+            <input type="text" name="licensePlate" placeholder="License Plate" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="number" name="mileage" placeholder="Mileage" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="number" name="newTireWidth" placeholder="New Tire Width" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="number" name="newTireProfile" placeholder="New Tire Profile" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <input type="number" name="newTireRimSize" placeholder="New Tire Rim Size" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <select name="newTireType" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+                <option value="">Select Tire Type</option>
+                <option value="summer">Summer</option>
+                <option value="winter">Winter</option>
+                <option value="spiked">Spiked</option>
+            </select>
+            <select name="newTireFrom" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+                <option value="">Tires Provided By</option>
+                <option value="supplier">Supplier</option>
+                <option value="company">Bought by Company</option>
+                <option value="used">Used Tires</option>
+            </select>
+            <input type="number" name="howManyTires" placeholder="How Many Tires" required class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <div id="tireProductsContainer">
+                <h2 class="text-lg font-bold mb-2">Products Used:</h2>
+                <button type="button" onclick="addTireProductInput()" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                    Add Product
+                </button>
+            </div>
+            <input type="text" name="comment" placeholder="Comment" class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Register Tire Service</button>
+        </form>
+    </div>
+
+    <script>
+        let tireProductCount = 0;
+
+        function addTireProductInput() {
+            if (tireProductCount >= 6) {
+                alert('Cannot add more than 6 products.');
+                return;
+            }
+            const container = document.getElementById('tireProductsContainer');
+            const inputHtml = `<div class="flex items-center mb-2">
+                <input type="number" name="product${tireProductCount}Id" placeholder="Product ID" required class="border-2 border-gray-300 rounded py-2 px-4 flex-grow">
+                <button type="button" onclick="this.parentElement.remove();" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                    Remove
+                </button>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', inputHtml);
+            tireProductCount++;
+        }
+
+        document.getElementById('tireServiceForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            // Assume registerTireService is a function provided by backend
+            registerTireService(data).then(() => {
+                alert('Tire service registered successfully!');
+                event.target.reset();
+            });
+        };
+    </script>
+</body>
+</html>

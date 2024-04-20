@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Fleet</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-xl font-bold text-center my-6">Search Fleet</h1>
+        <input type="text" id="searchField" placeholder="Enter License Plate" class="border-2 border-gray-300 rounded py-2 px-4 w-full mb-4">
+        <button onclick="searchFleet()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
+        <div id="searchResults" class="mt-4"></div>
+    </div>
+
+    <script>
+        function searchFleet() {
+            const licensePlate = document.getElementById('searchField').value;
+            // Assume searchFleetByPlate is a function provided by backend
+            searchFleetByPlate(licensePlate).then(cars => {
+                const resultsElement = document.getElementById('searchResults');
+                resultsElement.innerHTML = '';
+                cars.forEach(car => {
+                    resultsElement.innerHTML += `<div class="p-4 mb-2 bg-white rounded shadow">${car.licensePlate} - ${car.make} ${car.model}</div>`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register New Car</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-xl font-bold text-center my-6">Register New Car</h1>
+        <form id="newCarForm">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <input type="text" name="licensePlate" placeholder="License Plate" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="date" name="boughtDate" placeholder="Bought Date" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="make" placeholder="Make" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="model" placeholder="Model" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="type" placeholder="Type" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="vin" placeholder="VIN Number" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="color" placeholder="Color" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="transmission" placeholder="Transmission" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="engineSize" placeholder="Engine Size" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="text" name="fuelType" placeholder="Fuel Type" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+                <input type="number" name="doors" placeholder="Number of Doors" required class="border-2 border-gray-300 rounded py-2 px-4 w-full">
+            </div>
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register Car</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('newCarForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            // Assume registerCar is a function provided by backend
+            registerCar(data).then(() => {
+                alert('Car registered successfully!');
+                event.target.reset();
+            });
+        };
+    </script>
+</body>
+</html>
